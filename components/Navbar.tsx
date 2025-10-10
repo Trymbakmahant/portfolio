@@ -27,7 +27,6 @@ export default function Navbar({
   onNavLinkClick = () => {}, // Function to handle smooth scrolling
 }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   // Ref to hold the list container for calculating the active pill position
   const ulRef = useRef<HTMLDivElement>(null);
   // State for the pill/badge position and size
@@ -40,11 +39,8 @@ export default function Navbar({
       if (!ticking) {
         requestAnimationFrame(() => {
           const scrollY = window.scrollY;
-          const maxScroll = 200; // Maximum scroll distance for transition
-          const progress = Math.min(scrollY / maxScroll, 1);
           const isScrolled = scrollY > 100;
 
-          setScrollProgress(progress);
           setScrolled(isScrolled);
           ticking = false;
         });

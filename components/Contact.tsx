@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -7,9 +9,11 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/contact", {
@@ -21,14 +25,44 @@ export default function Contact() {
       });
 
       if (response.ok) {
-        alert("Message sent successfully!");
+        toast.success("Message sent successfully! I'll get back to you soon.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
         setFormData({ name: "", email: "", message: "" });
       } else {
-        alert("Failed to send message. Please try again.");
+        const errorData = await response.json();
+        toast.error(
+          errorData.error || "Failed to send message. Please try again.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Failed to send message. Please try again.");
+      toast.error(
+        "Failed to send message. Please check your connection and try again.",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -96,22 +130,51 @@ export default function Contact() {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="bg-gray-900 text-white px-8 py-4 rounded-full hover:bg-gray-800 transition flex items-center gap-2"
+                disabled={isSubmitting}
+                className="bg-gray-900 text-white px-8 py-4 rounded-full hover:bg-gray-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Submit now
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
+                {isSubmitting ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Submit now
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </>
+                )}
               </button>
             </div>
           </form>
@@ -161,6 +224,20 @@ export default function Contact() {
           </div>
         </div>
       </footer>
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

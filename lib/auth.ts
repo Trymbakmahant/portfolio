@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function verifyAdminCredentials(
   username: string,
@@ -15,7 +15,7 @@ export function getAdminSession(request: NextRequest): boolean {
   return sessionCookie?.value === "authenticated";
 }
 
-export function setAdminSession(response: Response): void {
+export function setAdminSession(response: NextResponse): void {
   response.cookies.set("admin-session", "authenticated", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -24,7 +24,7 @@ export function setAdminSession(response: Response): void {
   });
 }
 
-export function clearAdminSession(response: Response): void {
+export function clearAdminSession(response: NextResponse): void {
   response.cookies.set("admin-session", "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

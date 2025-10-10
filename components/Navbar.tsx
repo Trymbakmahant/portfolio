@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-// Removed Link import as we will use a button for the click handler
 
 // Default links are only for safety, links are passed via props now
 const defaultNavLinks = [
@@ -27,6 +26,7 @@ export default function Navbar({
   onNavLinkClick = () => {}, // Function to handle smooth scrolling
 }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Ref to hold the list container for calculating the active pill position
   const ulRef = useRef<HTMLDivElement>(null);
   // State for the pill/badge position and size
@@ -122,9 +122,12 @@ export default function Navbar({
     ? `${navBaseClasses} bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 w-fit max-w-[90vw]`
     : `${navBaseClasses} mx-auto rounded-b-2xl py-4 px-4 sm:py-5 sm:px-8 ${
         isDarkBackground
-          ? "bg-black/30 backdrop-blur-xl"
-          : "bg-white/20 backdrop-blur-xl"
+          ? "bg-black/30 backdrop-blur-xl md:bg-black/30"
+          : "bg-white/20 backdrop-blur-xl md:bg-white/20"
       } border border-white/10 w-[95%] sm:w-[85%]`;
+
+  // Mobile-specific navbar classes with solid background
+  const mobileNavbarClasses = `${navBaseClasses} bg-white backdrop-blur-xl shadow-lg border border-gray-200 w-full`;
 
   // Enhanced UL container with better glassmorphism and mobile responsiveness
   const ulContainerClasses = `
@@ -205,63 +208,157 @@ export default function Navbar({
     </div>
   );
 
-  return (
-    <nav className={navbarClasses}>
-      {/* Scroll Progress Indicator */}
+  const handleMobileNavClick = (id: string) => {
+    onNavLinkClick(id);
+    setMobileMenuOpen(false);
+  };
 
-      {/* ---------------------------------------------------------
-        Initial Layout: Shows logo, UL, and button (Fades OUT)
-        ---------------------------------------------------------
-      */}
-      <div className={fullLayoutClasses}>
-        {/* Enhanced Logo */}
-        <div
-          className={`text-xl sm:text-2xl font-bold ${logoColor} group cursor-pointer transition-all duration-300 hover:scale-105`}
-        >
-          <span className="relative">
-            Trymbak
-            <span className="text-pink-500 transition-all duration-300 group-hover:text-pink-400">
-              .
+  return (
+    <>
+      {/* Desktop Navbar */}
+      <nav className={`${navbarClasses} hidden md:block`}>
+        {/* ---------------------------------------------------------
+          Initial Layout: Shows logo, UL, and button (Fades OUT)
+          ---------------------------------------------------------
+        */}
+        <div className={fullLayoutClasses}>
+          {/* Enhanced Logo */}
+          <div
+            className={`text-xl sm:text-2xl font-bold ${logoColor} group cursor-pointer transition-all duration-300 hover:scale-105`}
+          >
+            <span className="relative">
+              Trymbak
+              <span className="text-pink-500 transition-all duration-300 group-hover:text-pink-400">
+                .
+              </span>
+              {/* Subtle glow effect */}
+              <span className="absolute inset-0 text-pink-500/20 blur-sm group-hover:blur-none transition-all duration-300">
+                Trymbak.
+              </span>
             </span>
-            {/* Subtle glow effect */}
-            <span className="absolute inset-0 text-pink-500/20 blur-sm group-hover:blur-none transition-all duration-300">
-              Trymbak.
-            </span>
-          </span>
+          </div>
+
+          {/* UL Container */}
+          <NavUL
+            ulClassName={ulContainerClasses}
+            links={navLinks}
+            isMinimal={false}
+          />
+
+          {/* Enhanced Connect Button */}
+          <button
+            className={connectButtonClasses}
+            onClick={() => onNavLinkClick("contact")} // Connect button links to contact
+          >
+            <span className="relative z-10">Connect</span>
+            {/* Shimmer effect */}
+            <span
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                            translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"
+            />
+          </button>
         </div>
 
-        {/* UL Container */}
-        <NavUL
-          ulClassName={ulContainerClasses}
-          links={navLinks}
-          isMinimal={false}
-        />
-
-        {/* Enhanced Connect Button */}
-        <button
-          className={connectButtonClasses}
-          onClick={() => onNavLinkClick("contact")} // Connect button links to contact
-        >
-          <span className="relative z-10">Connect</span>
-          {/* Shimmer effect */}
-          <span
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                          translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"
+        {/* ---------------------------------------------------------
+          Scrolled Layout: Shows only the centered UL container (Fades IN)
+          ---------------------------------------------------------
+        */}
+        <div className={minimalLayoutClasses}>
+          <NavUL
+            ulClassName={ulContainerClasses}
+            links={navLinks}
+            isMinimal={true}
           />
-        </button>
-      </div>
+        </div>
+      </nav>
 
-      {/* ---------------------------------------------------------
-        Scrolled Layout: Shows only the centered UL container (Fades IN)
-        ---------------------------------------------------------
-      */}
-      <div className={minimalLayoutClasses}>
-        <NavUL
-          ulClassName={ulContainerClasses}
-          links={navLinks}
-          isMinimal={true}
+      {/* Mobile Navbar - Completely separate with solid background */}
+      <nav className={`${mobileNavbarClasses} md:hidden`}>
+        <div className="flex items-center justify-between w-full px-4 py-3">
+          {/* Logo */}
+          <div className="text-xl font-bold text-gray-900 group cursor-pointer">
+            <span className="relative">
+              Trymbak
+              <span className="text-pink-500">.</span>
+            </span>
+          </div>
+
+          {/* Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="relative w-10 h-10 flex flex-col items-center justify-center space-y-1.5 rounded-lg transition-all duration-300 hover:bg-gray-100/50"
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`w-6 h-0.5 bg-gray-800 rounded-full transition-all duration-300 ${
+                mobileMenuOpen ? "rotate-45 translate-y-2" : ""
+              }`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-gray-800 rounded-full transition-all duration-300 ${
+                mobileMenuOpen ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`w-6 h-0.5 bg-gray-800 rounded-full transition-all duration-300 ${
+                mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
+              }`}
+            />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]"
+          onClick={() => setMobileMenuOpen(false)}
         />
+      )}
+
+      {/* Mobile Menu Slide-in */}
+      <div
+        className={`md:hidden fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-out ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col h-full p-6">
+          {/* Close Button */}
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="self-end mb-8 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label="Close menu"
+          >
+            <span className="text-2xl text-gray-600">×</span>
+          </button>
+
+          {/* Mobile Nav Links */}
+          <ul className="flex flex-col space-y-4">
+            {navLinks.map((link) => (
+              <li key={link.id}>
+                <button
+                  onClick={() => handleMobileNavClick(link.id)}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${
+                    link.id === activeId
+                      ? "bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-gray-900 font-semibold"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {link.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Connect Button */}
+          <button
+            onClick={() => handleMobileNavClick("contact")}
+            className="mt-auto w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300"
+          >
+            Connect
+          </button>
+        </div>
       </div>
-    </nav>
+    </>
   );
 }

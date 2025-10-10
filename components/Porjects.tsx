@@ -120,8 +120,9 @@ export default function Project() {
           My latest work
         </h1>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed opacity-0 animate-fade-in-up animation-delay-400">
-          Welcome to my web development portfolio! Explore a collection of
-          projects showcasing my expertise in front-end development.
+          A curated showcase of innovative projects spanning web3,
+          infrastructure, gaming, and enterprise solutions that I&apos;ve built
+          and launched.
         </p>
         <div className="mt-12 opacity-0 animate-fade-in-up animation-delay-600">
           <div className="animate-bounce">

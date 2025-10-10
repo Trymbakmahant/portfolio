@@ -98,6 +98,33 @@ export default function Project() {
       color: "from-lime-500 to-green-600",
       url: "https://www.leafspark.in/",
     },
+    {
+      title: "PeerPay SDK",
+      subtitle: "superfluid wave pool hackathon 2023 winner",
+      tag: "Ethereum",
+      image:
+        "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
+      color: "from-blue-500 to-purple-600",
+      url: "https://www.npmjs.com/package/peerpaysdk",
+    },
+    {
+      title: "D3vent",
+      subtitle: "ethglobal hackathon online 2022 winner",
+      tag: "Ethereum",
+      image:
+        "https://images.unsplash.com/photo-1639322537504-6427a16b0a28?w=800&q=80",
+      color: "from-orange-500 to-red-600",
+      url: "https://ethglobal.com/showcase/d3vent-ed4or",
+    },
+    {
+      title: "Web3TV",
+      subtitle: "ethindia hackathon 2022 winner",
+      tag: "Ethereum",
+      image:
+        "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80",
+      color: "from-green-500 to-emerald-600",
+      url: "https://ethglobal.com/showcase/web3tv-wzo43",
+    },
   ];
 
   return (

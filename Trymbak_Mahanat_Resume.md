@@ -56,7 +56,7 @@ Experienced Blockchain Full Stack Developer with over 4 years of professional ex
 
 **Freelance/Contract** | _2021 - Present_
 
-- Built and launched 4+ complex blockchain and web3 projects
+- Built and launched 7+ complex blockchain and web3 projects
 - Developed end-to-end solutions for consumer, infrastructure, gaming, and enterprise sectors
 - Specialized in creating decentralized applications with modern tech stack
 - Delivered projects with significant user engagement and transaction volume
@@ -101,6 +101,33 @@ Experienced Blockchain Full Stack Developer with over 4 years of professional ex
 - **URL:** [leafspark.in](https://www.leafspark.in/)
 - **Impact:** Enterprise-grade power infrastructure solutions
 
+### PeerPay SDK
+
+**Role:** Ethereum Developer | _2023_
+
+- **Technology:** Ethereum, Superfluid, SDK Development
+- **Description:** Built an SDK for peer-to-peer payments using Superfluid protocol
+- **URL:** [npmjs.com/package/peerpaysdk](https://www.npmjs.com/package/peerpaysdk)
+- **Impact:** Winner of Superfluid Wave Pool Hackathon 2023
+
+### D3vent
+
+**Role:** Ethereum Developer | _2022_
+
+- **Technology:** Ethereum, Smart Contracts, Web3
+- **Description:** Developed a decentralized event management platform
+- **URL:** [ethglobal.com/showcase/d3vent-ed4or](https://ethglobal.com/showcase/d3vent-ed4or)
+- **Impact:** Winner of ETHGlobal Hackathon Online 2022
+
+### Web3TV
+
+**Role:** Ethereum Developer | _2022_
+
+- **Technology:** Ethereum, Web3, Streaming Platform
+- **Description:** Built a decentralized streaming platform for Web3 content
+- **URL:** [ethglobal.com/showcase/web3tv-wzo43](https://ethglobal.com/showcase/web3tv-wzo43)
+- **Impact:** Winner of ETHIndia Hackathon 2022
+
 ---
 
 ## Education
@@ -112,10 +139,11 @@ O. P. Jindal University | 2023
 
 ## Certifications & Achievements
 
-- Successfully delivered 4+ complex blockchain projects
+- Successfully delivered 7+ complex blockchain projects
 - Built applications processing millions of transactions
 - Expertise in multiple blockchain ecosystems (Ethereum, Solana)
 - Proven track record in both consumer and enterprise solutions
+- **3x Hackathon Winner** (Superfluid Wave Pool 2023, ETHGlobal Online 2022, ETHIndia 2022)
 
 ---
 

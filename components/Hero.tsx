@@ -42,9 +42,13 @@ export default function Hero() {
           <button className="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
             connect with me <ArrowRight className="w-4 h-4" />
           </button>
-          <button className="flex  text-black items-center gap-2 border border-gray-300 px-6 py-3 rounded-full hover:bg-gray-100 transition">
+          <a
+            href="/trymbak_resume.pdf"
+            download="Trymbak_Mahanat_Resume.pdf"
+            className="flex text-black items-center gap-2 border border-gray-300 px-6 py-3 rounded-full hover:bg-gray-100 transition"
+          >
             my resume <Download className="w-4 h-4" />
-          </button>
+          </a>
         </div>
       </motion.div>
     </section>

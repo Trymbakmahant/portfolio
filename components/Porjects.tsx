@@ -73,15 +73,6 @@ export default function Project() {
       url: "https://eclipsedomains.xyz/",
     },
     {
-      title: "Solana Remix",
-      subtitle: "solana idl parser",
-      tag: "Infrastructure",
-      image:
-        "https://images.unsplash.com/photo-1639322537504-6427a16b0a28?w=800&q=80",
-      color: "from-orange-500 to-red-600",
-      url: "https://solana-remix.vercel.app/",
-    },
-    {
       title: "Stackem",
       subtitle: "80+ ETH volume",
       tag: "Games",

@@ -6,7 +6,7 @@ import { ArrowRight, Download } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-center justify-center text-center min-h-screen bg-gradient-to-b from-white to-gray-50 px-4">
+    <section className="flex mt-[40px] flex-col items-center justify-center text-center min-h-screen  px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,7 +42,7 @@ export default function Hero() {
           <button className="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition">
             connect with me <ArrowRight className="w-4 h-4" />
           </button>
-          <button className="flex items-center gap-2 border border-gray-300 px-6 py-3 rounded-full hover:bg-gray-100 transition">
+          <button className="flex  text-black items-center gap-2 border border-gray-300 px-6 py-3 rounded-full hover:bg-gray-100 transition">
             my resume <Download className="w-4 h-4" />
           </button>
         </div>

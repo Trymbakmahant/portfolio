@@ -1,21 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Code2, GraduationCap, Folder } from "lucide-react";
+import { GraduationCap, Folder } from "lucide-react";
 
 export default function About() {
-  // Define tools separately for cleaner JSX
-  const tools = [
-    "/icons/vscode.svg",
-    "/icons/firebase.svg",
-    "/icons/mongodb.svg",
-    "/icons/figma.svg",
-    "/icons/git.svg",
-    // You can add more icons here
-    "/icons/nextjs.svg",
-    "/icons/react.svg",
-  ];
-
   return (
     <section
       id="about"
@@ -49,17 +37,17 @@ export default function About() {
           </h2>
 
           <p className="text-gray-600 text-lg leading-relaxed mb-12 text-center md:text-left max-w-lg">
-            I'm an experienced **Blockchain Fullstack Developer** with over **3
-            years of professional expertise**. I specialize in creating robust,
-            end-to-end solutions, leveraging modern languages like **Rust and
-            TypeScript** to drive organizational success and growth in the
-            decentralized space.
+            I&apos;m an experienced **Blockchain Fullstack Developer** with over
+            **4 years of professional expertise**. I specialize in creating
+            robust, end-to-end solutions, leveraging modern languages like
+            **Rust and TypeScript** to drive organizational success and growth
+            in the decentralized space.
           </p>
 
           {/* Info Cards */}
           <div className="grid sm:grid-cols-3 gap-6 mb-12">
             <InfoCard
-              Icon={Code2}
+              Icon={GraduationCap}
               title="Key Languages"
               description="TypeScript, Rust, C++, Python"
             />
@@ -81,7 +69,13 @@ export default function About() {
 }
 
 // Separate Card Component for reusability and clean structure
-const InfoCard = ({ Icon, title, description }) => (
+interface InfoCardProps {
+  Icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+}
+
+const InfoCard = ({ Icon, title, description }: InfoCardProps) => (
   <div className="border border-gray-200 rounded-2xl p-6 text-center shadow-md bg-white hover:bg-pink-50 transition duration-300 transform hover:-translate-y-1">
     <Icon className="w-7 h-7 mx-auto mb-3 text-pink-600" />
     <h4 className="font-bold text-lg mb-1">{title}</h4>

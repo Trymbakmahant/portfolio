@@ -10,25 +10,57 @@ import Navbar from "@/components/Navbar";
 import Project from "@/components/Porjects"; // Ensure this component is dark
 import Tech from "@/components/Tech";
 
+// Define your navigation links with corresponding component IDs
+const sectionLinks = [
+  { label: "Home", id: "hero" },
+  { label: "About me", id: "about" },
+  { label: "Tech Stack", id: "tech" },
+  { label: "My work", id: "projects" },
+  { label: "Connect", id: "contact" },
+];
+
 export default function Home() {
   const [isProjectSection, setIsProjectSection] = useState(false);
-  // 1. Create a ref for the dark section (Project)
-  const projectRef = useRef(null);
+  const [activeSection, setActiveSection] = useState(sectionLinks[0].id); // State for current section
+
+  // Create refs for all sections
+  const sectionRefs = {
+    hero: useRef<HTMLDivElement>(null),
+    about: useRef<HTMLDivElement>(null),
+    tech: useRef<HTMLDivElement>(null),
+    projects: useRef<HTMLDivElement>(null),
+    contact: useRef<HTMLDivElement>(null),
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      if (projectRef.current) {
-        const top = projectRef.current.offsetTop;
-        const height = projectRef.current.offsetHeight;
-        const scrollPosition = window.scrollY + 100; // Add offset for Navbar height
+      let currentActiveId = sectionLinks[0].id;
+      // Offset to account for the fixed Navbar height and better active state visibility
+      const scrollOffset = window.scrollY + 200;
 
-        // 2. Check if the current scroll position is within the dark section bounds
-        if (scrollPosition >= top && scrollPosition < top + height) {
-          setIsProjectSection(true);
-        } else {
-          setIsProjectSection(false);
+      // 1. Determine the Active Section
+      let darkSectionIsVisible = false;
+
+      for (const link of sectionLinks) {
+        const ref = sectionRefs[link.id as keyof typeof sectionRefs].current;
+
+        if (ref) {
+          const top = ref.offsetTop;
+          const height = ref.offsetHeight;
+
+          if (scrollOffset >= top && scrollOffset < top + height) {
+            currentActiveId = link.id;
+
+            // Check specifically if the dark section is visible
+            if (link.id === "projects") {
+              darkSectionIsVisible = true;
+            }
+          }
         }
       }
+
+      setActiveSection(currentActiveId);
+      setIsProjectSection(darkSectionIsVisible);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -37,20 +69,41 @@ export default function Home() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []); // Re-run effect only if projectRef changes (which it won't after initial render)
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Smooth scroll function
+  const scrollToSection = (id: string) => {
+    const ref = sectionRefs[id as keyof typeof sectionRefs].current;
+    if (ref) {
+      ref.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center bg-white">
-      {/* 3. Pass the state to the Navbar */}
-      <Navbar isDarkBackground={isProjectSection} />
-      <Hero />
-      <About />
-      <Tech />
-      {/* 4. Attach the ref to the dark component */}
-      <div ref={projectRef}>
+      <Navbar
+        isDarkBackground={isProjectSection}
+        navLinks={sectionLinks} // Pass the updated links
+        activeId={activeSection} // Pass the active section ID
+        onNavLinkClick={scrollToSection} // Pass the click handler
+      />
+
+      {/* Attach refs and IDs to all section containers */}
+      <div id="hero" ref={sectionRefs.hero}>
+        <Hero />
+      </div>
+      <div id="about" ref={sectionRefs.about}>
+        <About />
+      </div>
+      <div id="tech" ref={sectionRefs.tech}>
+        <Tech />
+      </div>
+      <div id="projects" ref={sectionRefs.projects}>
         <Project />
       </div>
-      <Contact />
+      <div id="contact" ref={sectionRefs.contact}>
+        <Contact />
+      </div>
     </div>
   );
 }

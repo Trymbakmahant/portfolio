@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Code2 } from "lucide-react"; // Keeping one icon for a fallback if needed
 
 // --- Data for the Tech Stack Section ---
 const techList = [
@@ -32,7 +31,21 @@ const techList = [
 ];
 
 // --- Tech Icon Component with Magnifying Effect ---
-const TechIcon = ({ name, src, onHover, onLeave, isHovered }) => {
+interface TechIconProps {
+  name: string;
+  src: string;
+  onHover: (name: string) => void;
+  onLeave: () => void;
+  isHovered: boolean;
+}
+
+const TechIcon = ({
+  name,
+  src,
+  onHover,
+  onLeave,
+  isHovered,
+}: TechIconProps) => {
   return (
     <div
       className={`relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center m-2 p-2 
@@ -53,8 +66,9 @@ const TechIcon = ({ name, src, onHover, onLeave, isHovered }) => {
         height={isHovered ? 48 : 32}
         className="object-contain transition-all duration-300"
         onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = "/icons/placeholder.svg";
+          const target = e.target as HTMLImageElement;
+          target.onerror = null;
+          target.src = "/icons/placeholder.svg";
         }}
       />
       {/* Tooltip effect for the name */}
@@ -75,15 +89,15 @@ const TechIcon = ({ name, src, onHover, onLeave, isHovered }) => {
 
 // --- Main Tech Stack Section Component ---
 export default function Tech() {
-  const [hoveredTech, setHoveredTech] = useState(null);
+  const [hoveredTech, setHoveredTech] = useState<string | null>(null);
 
-  const handleHover = (name) => setHoveredTech(name);
+  const handleHover = (name: string) => setHoveredTech(name);
   const handleLeave = () => setHoveredTech(null);
 
   return (
     <section
       id="tech-stack"
-      className="flex flex-col items-center py-24 md:py-32 px-4 sm:px-6 bg-gray-50 text-gray-900"
+      className="flex flex-col items-center py-24 md:py-32 px-4 sm:px-6  text-gray-900"
     >
       <div className="max-w-4xl w-full text-center">
         {/* Section Heading */}

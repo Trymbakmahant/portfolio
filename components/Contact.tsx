@@ -24,7 +24,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex flex-col">
+    <div className="min-h-screen w-screen bg-gray-50 flex flex-col">
       {/* Main Content */}
       <div className="flex-grow flex items-center justify-center px-4 py-16">
         <div className="max-w-2xl w-full">
@@ -105,7 +105,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4">
           {/* Name and Email */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-serif mb-4">
+            <h2 className="text-3xl text-black font-serif mb-4">
               Trymbak<span className="text-red-500">.</span>
             </h2>
             <div className="flex items-center justify-center gap-2 text-gray-600">

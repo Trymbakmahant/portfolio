@@ -9,6 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Project() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const mainSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const pin = triggerRef.current;
@@ -58,6 +60,38 @@ export default function Project() {
 
     return () => {
       scrollTween.kill();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
+  // Word-by-word animation for heading
+  useEffect(() => {
+    if (headingRef.current && mainSectionRef.current) {
+      const words = headingRef.current.textContent?.split(" ") || [];
+      headingRef.current.innerHTML = words
+        .map((word) => `<span class="word">${word}</span>`)
+        .join(" ");
+
+      const wordElements = headingRef.current.querySelectorAll(".word");
+
+      gsap.set(wordElements, { y: 100, opacity: 0 });
+
+      gsap.to(wordElements, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: mainSectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
@@ -128,16 +162,24 @@ export default function Project() {
   ];
 
   return (
-    <div className="bg-black w-screen text-white">
+    <div
+      ref={mainSectionRef}
+      className="w-screen"
+      style={{ backgroundColor: "#F8F8F8", color: "#222222" }}
+    >
       {/* Intro Section */}
       <div className="min-h-screen flex flex-col items-center justify-center py-20 px-4 text-center">
-        <p className="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6 opacity-0 animate-fade-in-up">
-          My portfolio
-        </p>
-        <h1 className="text-6xl md:text-8xl font-light mb-8 bg-gradient-to-br from-white to-gray-500 bg-clip-text text-transparent opacity-0 animate-fade-in-up animation-delay-200">
+        <h1
+          ref={headingRef}
+          className="text-6xl md:text-8xl font-light mb-8"
+          style={{ color: "#222222" }}
+        >
           My latest work
         </h1>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed opacity-0 animate-fade-in-up animation-delay-400">
+        <p
+          className="text-lg max-w-2xl mx-auto leading-relaxed opacity-0 animate-fade-in-up animation-delay-400"
+          style={{ color: "#7B7B7B" }}
+        >
           A curated showcase of innovative projects spanning web3,
           infrastructure, gaming, and enterprise solutions that I&apos;ve built
           and launched.
@@ -145,7 +187,14 @@ export default function Project() {
         <div className="mt-12 opacity-0 animate-fade-in-up animation-delay-600">
           <div className="animate-bounce">
             <svg
-              className="w-6 h-6 text-gray-500 transition-colors duration-300 hover:text-lime-400"
+              className="w-6 h-6 transition-colors duration-300"
+              style={{ color: "#7B7B7B" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#222222";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#7B7B7B";
+              }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -185,6 +234,7 @@ export default function Project() {
                   alt={project.title}
                   fill
                   className="object-cover transition-all duration-1000 ease-out group-hover:scale-110 group-hover:brightness-110"
+                  style={{ filter: "grayscale(100%) contrast(1.1)" }}
                 />
               </div>
 
@@ -196,22 +246,38 @@ export default function Project() {
 
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-10 z-10 transform transition-transform duration-700 group-hover:-translate-y-2">
-                <span className="inline-block px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs tracking-wider uppercase mb-6 border border-white/20 transition-all duration-500 group-hover:bg-white/20 group-hover:border-white/40">
+                <span
+                  className="inline-block px-5 py-2 backdrop-blur-md rounded-full text-xs tracking-wider uppercase mb-6 border transition-all duration-500"
+                  style={{
+                    backgroundColor: "rgba(123, 123, 123, 0.1)",
+                    borderColor: "rgba(123, 123, 123, 0.2)",
+                  }}
+                >
                   {project.tag}
                 </span>
 
-                <h3 className="text-4xl font-semibold mb-3 transition-all duration-500 group-hover:text-white">
+                <h3
+                  className="text-4xl font-semibold mb-3 transition-all duration-500"
+                  style={{ color: "#FFFFFF" }}
+                >
                   {project.title}
                 </h3>
 
-                <p className="text-gray-300 text-base mb-8 transition-all duration-500 group-hover:text-gray-100">
+                <p
+                  className="text-base mb-8 transition-all duration-500"
+                  style={{ color: "#7B7B7B" }}
+                >
                   {project.subtitle}
                 </p>
 
                 {/* Arrow Button */}
-                <div className="w-14 h-14 bg-lime-400 rounded-full flex items-center justify-center transition-all duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:bg-lime-300 group-hover:shadow-lg group-hover:shadow-lime-400/25">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:shadow-lg"
+                  style={{ backgroundColor: "#7B7B7B" }}
+                >
                   <svg
-                    className="w-6 h-6 stroke-black transition-transform duration-500 group-hover:rotate-45"
+                    className="w-6 h-6 transition-transform duration-500 group-hover:rotate-45"
+                    style={{ stroke: "#FFFFFF" }}
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={2}
@@ -226,7 +292,7 @@ export default function Project() {
               </div>
 
               {/* Hover Effect Border */}
-              <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/30 rounded-3xl transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-white/10" />
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-white/30 rounded-3xl transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-white/10" />
 
               {/* Subtle glow effect */}
               <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-r from-transparent via-white/5 to-transparent" />

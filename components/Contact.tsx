@@ -1,7 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -9,7 +13,90 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const socialLinksRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (headingRef.current && sectionRef.current) {
+      const words = headingRef.current.textContent?.split(" ") || [];
+      headingRef.current.innerHTML = words
+        .map((word) => `<span class="word">${word}</span>`)
+        .join(" ");
+
+      const wordElements = headingRef.current.querySelectorAll(".word");
+
+      gsap.set(wordElements, { y: 50, opacity: 0 });
+
+      gsap.to(wordElements, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Animate form elements
+    if (formRef.current && sectionRef.current) {
+      const formElements = formRef.current.querySelectorAll(
+        "input, textarea, button"
+      );
+      gsap.fromTo(
+        formElements,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          delay: 0.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+
+    // Animate social links
+    if (socialLinksRef.current && sectionRef.current) {
+      const socialLinks = socialLinksRef.current.children;
+      gsap.fromTo(
+        socialLinks,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          delay: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,17 +163,30 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gray-50 flex flex-col">
+    <div
+      ref={sectionRef}
+      className="min-h-screen w-screen flex flex-col"
+      style={{ backgroundColor: "#F8F8F8" }}
+    >
       {/* Main Content */}
       <div className="flex-grow flex items-center justify-center px-4 py-16">
         <div className="max-w-2xl w-full">
           {/* Header */}
           <div className="text-center mb-12">
-            <p className="text-gray-600 text-sm mb-2">Connect with me</p>
-            <h1 className="text-5xl text-black font-serif mb-6">
+            <p
+              className="text-sm mb-2 font-medium"
+              style={{ color: "#7B7B7B" }}
+            >
+              Connect with me
+            </p>
+            <h1
+              ref={headingRef}
+              className="text-5xl font-serif mb-6"
+              style={{ color: "#222222" }}
+            >
               Get in touch
             </h1>
-            <p className="text-gray-600">
+            <p style={{ color: "#7B7B7B" }}>
               I&apos;d love to hear from you! If you have any questions,
               comments or
               <br />
@@ -95,7 +195,7 @@ export default function Contact() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <input
                 type="text"
@@ -103,7 +203,21 @@ export default function Contact() {
                 placeholder="Enter your name"
                 value={formData.name}
                 onChange={handleChange}
-                className="px-6 py-4 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+                className="px-6 py-4 border rounded-lg focus:outline-none focus:ring-2 transition"
+                style={{
+                  color: "#FFFFFF",
+                  backgroundColor: "#7B7B7B",
+                  borderColor: "#7B7B7B",
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#FFFFFF";
+                  e.target.style.boxShadow =
+                    "0 0 0 2px rgba(255, 255, 255, 0.2)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "#7B7B7B";
+                  e.target.style.boxShadow = "none";
+                }}
                 required
               />
               <input
@@ -112,7 +226,21 @@ export default function Contact() {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
-                className="px-6 py-4 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+                className="px-6 py-4 border rounded-lg focus:outline-none focus:ring-2 transition"
+                style={{
+                  color: "#FFFFFF",
+                  backgroundColor: "#7B7B7B",
+                  borderColor: "#7B7B7B",
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#FFFFFF";
+                  e.target.style.boxShadow =
+                    "0 0 0 2px rgba(255, 255, 255, 0.2)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "#7B7B7B";
+                  e.target.style.boxShadow = "none";
+                }}
                 required
               />
             </div>
@@ -123,7 +251,20 @@ export default function Contact() {
               value={formData.message}
               onChange={handleChange}
               rows={6}
-              className="w-full px-6 py-4 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 transition resize-none"
+              className="w-full px-6 py-4 border rounded-lg focus:outline-none focus:ring-2 transition resize-none"
+              style={{
+                color: "#FFFFFF",
+                backgroundColor: "#7B7B7B",
+                borderColor: "#7B7B7B",
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "#FFFFFF";
+                e.target.style.boxShadow = "0 0 0 2px rgba(255, 255, 255, 0.2)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "#7B7B7B";
+                e.target.style.boxShadow = "none";
+              }}
               required
             />
 
@@ -131,7 +272,22 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-gray-900 text-white px-8 py-4 rounded-full hover:bg-gray-800 transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-4 rounded-full transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                style={{
+                  backgroundColor: "#7B7B7B",
+                  color: "#FFFFFF",
+                  boxShadow: "0 10px 25px rgba(123, 123, 123, 0.3)",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSubmitting) {
+                    e.currentTarget.style.backgroundColor = "#8B8B8B";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSubmitting) {
+                    e.currentTarget.style.backgroundColor = "#7B7B7B";
+                  }
+                }}
               >
                 {isSubmitting ? (
                   <>
@@ -182,14 +338,20 @@ export default function Contact() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 py-8">
+      <footer className="border-t py-8" style={{ borderColor: "#7B7B7B" }}>
         <div className="max-w-7xl mx-auto px-4">
           {/* Name and Email */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl text-black font-serif mb-4">
-              Trymbak<span className="text-red-500">.</span>
+            <h2
+              className="text-3xl font-serif mb-4"
+              style={{ color: "#FFFFFF" }}
+            >
+              Trymbak<span style={{ color: "#7B7B7B" }}>.</span>
             </h2>
-            <div className="flex items-center justify-center gap-2 text-gray-600 mb-6">
+            <div
+              className="flex items-center justify-center gap-2 mb-6"
+              style={{ color: "#7B7B7B" }}
+            >
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -207,12 +369,22 @@ export default function Contact() {
             </div>
 
             {/* Social Media Links */}
-            <div className="flex justify-center gap-6 mb-8">
+            <div
+              ref={socialLinksRef}
+              className="flex justify-center gap-6 mb-8"
+            >
               <a
                 href="https://github.com/TrymbakMahant"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                className="transition-colors duration-300"
+                style={{ color: "#7B7B7B" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#FFFFFF";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#7B7B7B";
+                }}
                 aria-label="Visit Trymbak Mahanat's GitHub profile"
               >
                 <svg
@@ -229,7 +401,14 @@ export default function Contact() {
                 href="https://x.com/TrymbakMahant"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                className="transition-colors duration-300"
+                style={{ color: "#7B7B7B" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#FFFFFF";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#7B7B7B";
+                }}
                 aria-label="Visit Trymbak Mahanat's X (Twitter) profile"
               >
                 <svg
@@ -246,7 +425,14 @@ export default function Contact() {
                 href="https://www.linkedin.com/in/trymbak-mahant-2652701ba/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                className="transition-colors duration-300"
+                style={{ color: "#7B7B7B" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#FFFFFF";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#7B7B7B";
+                }}
                 aria-label="Visit Trymbak Mahanat's LinkedIn profile"
               >
                 <svg
@@ -262,13 +448,34 @@ export default function Contact() {
           </div>
 
           {/* Footer Bottom */}
-          <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-gray-200 text-sm text-gray-600">
+          <div
+            className="flex flex-col md:flex-row justify-between items-center pt-6 border-t text-sm"
+            style={{ borderColor: "#7B7B7B", color: "#7B7B7B" }}
+          >
             <p>© 2025 Trymbak Mahanat. All rights reserved.</p>
             <div className="flex gap-8 mt-4 md:mt-0">
-              <a href="#" className="hover:text-gray-900 transition">
+              <a
+                href="#"
+                className="transition"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#FFFFFF";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#7B7B7B";
+                }}
+              >
                 Terms of Services
               </a>
-              <a href="#" className="hover:text-gray-900 transition">
+              <a
+                href="#"
+                className="transition"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#FFFFFF";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#7B7B7B";
+                }}
+              >
                 Privacy Policy
               </a>
             </div>

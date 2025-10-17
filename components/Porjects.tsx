@@ -214,11 +214,10 @@ export default function Project() {
       <div ref={triggerRef} className="overflow-hidden">
         <div
           ref={sectionRef}
-          className="flex gap-8 h-screen items-center will-change-transform"
+          className="flex gap-8 h-screen items-center will-change-transform pr-0 md:pr-[10vw]"
           style={{
             width: "max-content",
             paddingLeft: "0",
-            paddingRight: "10vw",
           }}
         >
           {projects.map((project, index) => (

@@ -5,14 +5,12 @@
 import { useState, useEffect, useRef } from "react";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
-import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Project from "@/components/Porjects"; // Ensure this component is dark
 import Tech from "@/components/Tech";
 
 // Define your navigation links with corresponding component IDs
 const sectionLinks = [
-  { label: "Home", id: "hero" },
   { label: "About me", id: "about" },
   { label: "Tech Stack", id: "tech" },
   { label: "My work", id: "projects" },
@@ -25,7 +23,6 @@ export default function Home() {
 
   // Create refs for all sections
   const sectionRefs = {
-    hero: useRef<HTMLDivElement>(null),
     about: useRef<HTMLDivElement>(null),
     tech: useRef<HTMLDivElement>(null),
     projects: useRef<HTMLDivElement>(null),
@@ -80,7 +77,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center bg-white">
+    <div className="flex flex-col justify-center items-center bg-[#F8F8F8]">
       <Navbar
         isDarkBackground={isProjectSection}
         navLinks={sectionLinks} // Pass the updated links
@@ -89,9 +86,6 @@ export default function Home() {
       />
 
       {/* Attach refs and IDs to all section containers */}
-      <div id="hero" ref={sectionRefs.hero}>
-        <Hero />
-      </div>
       <div id="about" ref={sectionRefs.about}>
         <About />
       </div>

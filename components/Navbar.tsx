@@ -67,12 +67,17 @@ export default function Navbar({
         const ulRect = ulRef.current.getBoundingClientRect();
         const linkRect = activeLinkElement.getBoundingClientRect();
 
+        // Calculate the offset from the UL container's padding
+        const ulPaddingLeft =
+          parseInt(getComputedStyle(ulRef.current).paddingLeft) || 0;
+        const ulPaddingTop =
+          parseInt(getComputedStyle(ulRef.current).paddingTop) || 0;
+
         setActivePillStyle({
-          left: linkRect.left - ulRect.left + "px",
+          left: linkRect.left - ulRect.left - ulPaddingLeft + 20 + "px",
           width: linkRect.width + "px",
           height: linkRect.height + "px",
-          // Center the pill vertically
-          top: linkRect.top - ulRect.top + "px",
+          top: linkRect.top - ulRect.top - ulPaddingTop + 12 + "px",
           opacity: 1,
         });
       } else {
@@ -84,7 +89,7 @@ export default function Navbar({
 
   // --- Enhanced Color-dependent classes ---
   const textColor =
-    isDarkBackground && !scrolled ? "text-white/90" : "text-gray-800";
+    isDarkBackground && !scrolled ? "text-white" : "text-gray-800";
   const logoColor =
     isDarkBackground && !scrolled ? "text-white" : "text-gray-900";
 
@@ -122,9 +127,9 @@ export default function Navbar({
     ? `${navBaseClasses} bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 w-fit max-w-[90vw]`
     : `${navBaseClasses} mx-auto rounded-b-2xl py-4 px-4 sm:py-5 sm:px-8 ${
         isDarkBackground
-          ? "bg-black/30 backdrop-blur-xl md:bg-black/30"
-          : "bg-white/20 backdrop-blur-xl md:bg-white/20"
-      } border border-white/10 w-[95%] sm:w-[85%]`;
+          ? "backdrop-blur-xl border-gray-600/50"
+          : "bg-white/20 backdrop-blur-xl md:bg-white/20 border-white/10"
+      } w-[95%] sm:w-[85%]`;
 
   // Mobile-specific navbar classes with solid background
   const mobileNavbarClasses = `${navBaseClasses} bg-white backdrop-blur-xl shadow-lg border border-gray-200 w-full`;
@@ -136,7 +141,7 @@ export default function Navbar({
       scrolled
         ? "border-white/30 bg-white/40 backdrop-blur-2xl shadow-inner"
         : isDarkBackground
-        ? "bg-black/20 border-white/10 backdrop-blur-xl"
+        ? "backdrop-blur-xl"
         : "border-white/20 bg-white/20 backdrop-blur-xl"
     }
   `;
@@ -216,7 +221,14 @@ export default function Navbar({
   return (
     <>
       {/* Desktop Navbar */}
-      <nav className={`${navbarClasses} hidden md:block`}>
+      <nav
+        className={`${navbarClasses} hidden md:block`}
+        style={
+          isDarkBackground && !scrolled
+            ? { backgroundColor: "rgba(34, 34, 34, 0.8)" }
+            : {}
+        }
+      >
         {/* ---------------------------------------------------------
           Initial Layout: Shows logo, UL, and button (Fades OUT)
           ---------------------------------------------------------
@@ -239,11 +251,19 @@ export default function Navbar({
           </div>
 
           {/* UL Container */}
-          <NavUL
-            ulClassName={ulContainerClasses}
-            links={navLinks}
-            isMinimal={false}
-          />
+          <div
+            className={ulContainerClasses}
+            style={
+              isDarkBackground && !scrolled
+                ? {
+                    backgroundColor: "rgba(123, 123, 123, 0.1)",
+                    borderColor: "rgba(123, 123, 123, 0.3)",
+                  }
+                : {}
+            }
+          >
+            <NavUL ulClassName="" links={navLinks} isMinimal={false} />
+          </div>
 
           {/* Enhanced Connect Button */}
           <button
@@ -264,11 +284,19 @@ export default function Navbar({
           ---------------------------------------------------------
         */}
         <div className={minimalLayoutClasses}>
-          <NavUL
-            ulClassName={ulContainerClasses}
-            links={navLinks}
-            isMinimal={true}
-          />
+          <div
+            className={ulContainerClasses}
+            style={
+              isDarkBackground && !scrolled
+                ? {
+                    backgroundColor: "rgba(123, 123, 123, 0.1)",
+                    borderColor: "rgba(123, 123, 123, 0.3)",
+                  }
+                : {}
+            }
+          >
+            <NavUL ulClassName="" links={navLinks} isMinimal={true} />
+          </div>
         </div>
       </nav>
 

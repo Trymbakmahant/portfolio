@@ -74,10 +74,10 @@ export default function Navbar({
           parseInt(getComputedStyle(ulRef.current).paddingTop) || 0;
 
         setActivePillStyle({
-          left: linkRect.left - ulRect.left - ulPaddingLeft + 20 + "px",
+          left: linkRect.left - ulRect.left - ulPaddingLeft + 25 + "px",
           width: linkRect.width + "px",
           height: linkRect.height + "px",
-          top: linkRect.top - ulRect.top - ulPaddingTop + 12 + "px",
+          top: linkRect.top - ulRect.top - ulPaddingTop + 15 + "px",
           opacity: 1,
         });
       } else {

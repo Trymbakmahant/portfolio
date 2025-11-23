@@ -246,7 +246,7 @@ export default function Project() {
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-10 z-10 transform transition-transform duration-700 group-hover:-translate-y-2">
                 <span
-                  className="inline-block px-5 py-2 backdrop-blur-md rounded-full text-xs tracking-wider uppercase mb-6 border transition-all duration-500"
+                  className="inline-block px-5 py-2 backdrop-blur-md rounded-full text-xs  text-white tracking-wider uppercase mb-6 border transition-all duration-500"
                   style={{
                     backgroundColor: "rgba(123, 123, 123, 0.1)",
                     borderColor: "rgba(123, 123, 123, 0.2)",

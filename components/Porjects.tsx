@@ -1,301 +1,276 @@
 "use client";
-import { useEffect, useRef } from "react";
-import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef, useState } from "react";
+import ScatterBox from "./ScatterBox";
+import ScatterText from "./ScatterText";
 
-gsap.registerPlugin(ScrollTrigger);
+const projects = [
+  {
+    title: "PnP Exchange",
+    subtitle: "Real-time prediction markets on Solana with AI Oracle integration",
+    tag: "SOLANA",
+    stack: ["Rust", "Anchor", "TypeScript", "AI Oracles"],
+    url: "https://x.com/predictandpump",
+    accent: "#00ff88",
+  },
+  {
+    title: "Modern Village Future",
+    subtitle: "Agricultural supply chain protocol deployed on Base Mainnet",
+    tag: "BASE",
+    stack: ["Solidity", "TypeScript", "SDK", "PostgreSQL"],
+    url: "https://modernvillagefuture.com",
+    accent: "#00d4ff",
+  },
+  {
+    title: "LeafSpark",
+    subtitle: "Enterprise web platform with admin dashboards & secure data pipelines",
+    tag: "ENTERPRISE",
+    stack: ["Next.js", "Node.js", "PostgreSQL", "REST APIs"],
+    url: "https://www.leafspark.in/",
+    accent: "#ff6b35",
+  },
+  {
+    title: "Sunflower Ruby",
+    subtitle: "Solana ecosystem showcase with real-time blockchain telemetry",
+    tag: "SOLANA",
+    stack: ["Solana Web3.js", "Wallet Adapter", "React", "TypeScript"],
+    url: "https://sunflower-ruby.vercel.app",
+    accent: "#a855f7",
+  },
+];
 
-export default function Project() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const mainSectionRef = useRef<HTMLDivElement>(null);
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof projects)[0];
+  index: number;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    const pin = triggerRef.current;
-    const slider = sectionRef.current;
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setMousePos({ x, y });
+  };
 
-    if (!pin || !slider) return;
-
-    // Calculate total scroll distance
-    const totalScrollWidth = slider.scrollWidth - window.innerWidth;
-
-    // Create horizontal scroll animation with smoother easing
-    const scrollTween = gsap.to(slider, {
-      x: -totalScrollWidth,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: pin,
-        start: "top top",
-        end: () => `+=${totalScrollWidth}`,
-        scrub: 0.5, // Reduced for smoother animation
-        pin: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        markers: false,
-        onUpdate: (self) => {
-          // Add parallax effect to individual cards
-          const cards = slider.querySelectorAll(".project-card");
-          cards.forEach((card, index) => {
-            const progress = self.progress;
-            const cardOffset = index * 608; // 600px width + 8px gap
-            const cardProgress = Math.max(
-              0,
-              Math.min(1, (progress * totalScrollWidth - cardOffset) / 608)
-            );
-
-            gsap.to(card, {
-              y: Math.sin(cardProgress * Math.PI) * -20,
-              scale: 0.95 + Math.sin(cardProgress * Math.PI) * 0.05,
-              duration: 0.3,
-              ease: "power2.out",
-            });
-          });
-        },
-      },
-    });
-
-    // Cards are now visible by default without fade-in animation
-
-    return () => {
-      scrollTween.kill();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
-
-  // Word-by-word animation for heading
-  useEffect(() => {
-    if (headingRef.current && mainSectionRef.current) {
-      const words = headingRef.current.textContent?.split(" ") || [];
-      headingRef.current.innerHTML = words
-        .map((word) => `<span class="word">${word}</span>`)
-        .join(" ");
-
-      const wordElements = headingRef.current.querySelectorAll(".word");
-
-      gsap.set(wordElements, { y: 100, opacity: 0 });
-
-      gsap.to(wordElements, {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: mainSectionRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-      });
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
-
-  const projects = [
-    {
-      title: "Eclipse Domains",
-      subtitle: "web3 domain name services",
-      tag: "Consumer",
-      image:
-        "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
-      color: "from-purple-500 to-indigo-600",
-      url: "https://eclipsedomains.xyz/",
-    },
-    {
-      title: "Stackem",
-      subtitle: "80+ ETH volume",
-      tag: "Games",
-      image: "/stackem.jpeg",
-      color: "from-green-500 to-emerald-600",
-      url: "https://x.com/stackem_xyz",
-    },
-    {
-      title: "TurboWhack",
-      subtitle: "3M+ onchain txns",
-      tag: "Games",
-      image:
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80",
-      color: "from-blue-500 to-cyan-600",
-      url: "https://x.com/TurboWhack",
-    },
-    {
-      title: "LeafSpark",
-      subtitle: "campus critical power solutions",
-      tag: "Enterprise",
-      image:
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
-      color: "from-lime-500 to-green-600",
-      url: "https://www.leafspark.in/",
-    },
-    {
-      title: "PeerPay SDK",
-      subtitle: "superfluid wave pool hackathon 2023 winner",
-      tag: "Ethereum",
-      image:
-        "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
-      color: "from-blue-500 to-purple-600",
-      url: "https://www.npmjs.com/package/peerpaysdk",
-    },
-    {
-      title: "D3vent",
-      subtitle: "ethglobal hackathon online 2022 winner",
-      tag: "Ethereum",
-      image:
-        "https://images.unsplash.com/photo-1639322537504-6427a16b0a28?w=800&q=80",
-      color: "from-orange-500 to-red-600",
-      url: "https://ethglobal.com/showcase/d3vent-ed4or",
-    },
-    {
-      title: "Web3TV",
-      subtitle: "ethindia hackathon 2022 winner",
-      tag: "Ethereum",
-      image:
-        "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80",
-      color: "from-green-500 to-emerald-600",
-      url: "https://ethglobal.com/showcase/web3tv-wzo43",
-    },
-  ];
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setMousePos({ x: 0, y: 0 });
+  };
 
   return (
     <div
-      ref={mainSectionRef}
-      className="w-screen"
-      style={{ backgroundColor: "#F8F8F8", color: "#222222" }}
+      ref={cardRef}
+      className="project-card relative group cursor-pointer"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => window.open(project.url, "_blank")}
+      style={{ perspective: "1000px" }}
     >
-      {/* Intro Section */}
-      <div className="min-h-screen flex flex-col items-center justify-center py-20 px-4 text-center">
-        <h1
-          ref={headingRef}
-          className="text-6xl md:text-8xl font-light mb-8"
-          style={{ color: "#222222" }}
-        >
-          My latest work
-        </h1>
-        <p
-          className="text-lg max-w-2xl mx-auto leading-relaxed opacity-0 animate-fade-in-up animation-delay-400"
-          style={{ color: "#7B7B7B" }}
-        >
-          A curated showcase of innovative projects spanning web3,
-          infrastructure, gaming, and enterprise solutions that I&apos;ve built
-          and launched.
-        </p>
-        <div className="mt-12 opacity-0 animate-fade-in-up animation-delay-600">
-          <div className="animate-bounce">
-            <svg
-              className="w-6 h-6 transition-colors duration-300"
-              style={{ color: "#7B7B7B" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "#222222";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "#7B7B7B";
-              }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      {/* Horizontal Scroll Section - This gets pinned */}
-      <div ref={triggerRef} className="overflow-hidden">
+      <div
+        className="relative p-[1px] rounded-2xl transition-all duration-500"
+        style={{
+          transform: isHovered
+            ? `rotateY(${mousePos.x * 10}deg) rotateX(${-mousePos.y * 10}deg) translateZ(20px)`
+            : "rotateY(0deg) rotateX(0deg) translateZ(0px)",
+          transformStyle: "preserve-3d",
+          background: isHovered
+            ? `linear-gradient(135deg, ${project.accent}88, transparent 40%, ${project.accent}44)`
+            : "linear-gradient(135deg, rgba(255,255,255,0.06), transparent 40%, rgba(255,255,255,0.03))",
+        }}
+      >
         <div
-          ref={sectionRef}
-          className="flex gap-8 h-screen items-center will-change-transform pr-0 md:pr-[10vw]"
+          className="relative rounded-2xl p-8 md:p-10 overflow-hidden h-full"
           style={{
-            width: "max-content",
-            paddingLeft: "0",
+            background: "linear-gradient(145deg, rgba(15,15,20,0.98), rgba(8,8,12,0.99))",
+            minHeight: "340px",
           }}
         >
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              className="project-card min-w-[600px] h-[600px] relative rounded-3xl overflow-hidden cursor-pointer group flex-shrink-0"
-              onClick={() => project.url && window.open(project.url, "_blank")}
+          {/* Scanline overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.03]"
+            style={{
+              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px)",
+            }}
+          />
+
+          {/* Glow effect */}
+          <div
+            className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-700"
+            style={{
+              opacity: isHovered ? 0.15 : 0,
+              background: `radial-gradient(600px circle at ${(mousePos.x + 0.5) * 100}% ${(mousePos.y + 0.5) * 100}%, ${project.accent}, transparent 40%)`,
+            }}
+          />
+
+          {/* Grid background */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.04]"
+            style={{
+              backgroundImage: `linear-gradient(${project.accent}22 1px, transparent 1px), linear-gradient(90deg, ${project.accent}22 1px, transparent 1px)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
+
+          {/* Top row */}
+          <div className="relative z-10 flex items-center justify-between mb-8">
+            <span className="font-mono text-xs tracking-wider" style={{ color: "rgba(255,255,255,0.3)" }}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span
+              className="font-mono text-[10px] tracking-[0.2em] px-3 py-1 rounded-full border"
+              style={{
+                color: project.accent,
+                borderColor: `${project.accent}33`,
+                backgroundColor: `${project.accent}0a`,
+              }}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-all duration-1000 ease-out group-hover:scale-110 group-hover:brightness-110"
-                  style={{ filter: "grayscale(100%) contrast(1.1)" }}
-                />
-              </div>
+              {project.tag}
+            </span>
+          </div>
 
-              {/* Gradient Overlay */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-t ${project.color} opacity-60 mix-blend-multiply transition-opacity duration-700 group-hover:opacity-40`}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent transition-opacity duration-700 group-hover:opacity-80" />
+          {/* Title */}
+          <h3
+            className="relative z-10 text-2xl md:text-3xl font-bold mb-3 transition-colors duration-300"
+            style={{
+              color: isHovered ? project.accent : "#ffffff",
+              textShadow: isHovered ? `0 0 30px ${project.accent}44` : "none",
+            }}
+          >
+            {project.title}
+          </h3>
 
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-10 z-10 transform transition-transform duration-700 group-hover:-translate-y-2">
-                <span
-                  className="inline-block px-5 py-2 backdrop-blur-md rounded-full text-xs  text-white tracking-wider uppercase mb-6 border transition-all duration-500"
-                  style={{
-                    backgroundColor: "rgba(123, 123, 123, 0.1)",
-                    borderColor: "rgba(123, 123, 123, 0.2)",
-                  }}
-                >
-                  {project.tag}
-                </span>
+          {/* Subtitle */}
+          <p className="relative z-10 text-sm leading-relaxed mb-8 max-w-md" style={{ color: "rgba(255,255,255,0.5)" }}>
+            {project.subtitle}
+          </p>
 
-                <h3
-                  className="text-4xl font-semibold mb-3 transition-all duration-500"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  {project.title}
-                </h3>
+          {/* Tech stack */}
+          <div className="relative z-10 flex flex-wrap gap-2 mb-8">
+            {project.stack.map((tech) => (
+              <span
+                key={tech}
+                className="font-mono text-[11px] px-3 py-1 rounded-md border"
+                style={{
+                  color: "rgba(255,255,255,0.6)",
+                  borderColor: "rgba(255,255,255,0.08)",
+                  backgroundColor: "rgba(255,255,255,0.03)",
+                }}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
 
-                <p
-                  className="text-base mb-8 transition-all duration-500"
-                  style={{ color: "#7B7B7B" }}
-                >
-                  {project.subtitle}
-                </p>
-
-                {/* Arrow Button */}
-                <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:shadow-lg"
-                  style={{ backgroundColor: "#7B7B7B" }}
-                >
-                  <svg
-                    className="w-6 h-6 transition-transform duration-500 group-hover:rotate-45"
-                    style={{ stroke: "#FFFFFF" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M7 17L17 7M17 7H7M17 7V17"
-                    />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Hover Effect Border */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-white/30 rounded-3xl transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-white/10" />
-
-              {/* Subtle glow effect */}
-              <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+          {/* Arrow */}
+          <div className="relative z-10 flex items-center gap-2 mt-auto">
+            <div
+              className="w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-500 group-hover:translate-x-1"
+              style={{
+                borderColor: isHovered ? `${project.accent}66` : "rgba(255,255,255,0.1)",
+                backgroundColor: isHovered ? `${project.accent}11` : "transparent",
+              }}
+            >
+              <svg
+                className="w-4 h-4 transition-all duration-500 group-hover:rotate-45"
+                style={{ color: isHovered ? project.accent : "rgba(255,255,255,0.5)" }}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
             </div>
+            <span className="font-mono text-xs transition-all duration-300" style={{ color: isHovered ? project.accent : "rgba(255,255,255,0.3)" }}>
+              View Project
+            </span>
+          </div>
+
+          {/* Corner decorations */}
+          <div className="absolute top-0 right-0 w-20 h-20 pointer-events-none" style={{ borderRight: `1px solid ${project.accent}22`, borderTop: `1px solid ${project.accent}22`, borderTopRightRadius: "16px" }} />
+          <div className="absolute bottom-0 left-0 w-20 h-20 pointer-events-none" style={{ borderLeft: `1px solid ${project.accent}22`, borderBottom: `1px solid ${project.accent}22`, borderBottomLeftRadius: "16px" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Project() {
+  return (
+    <div
+      className="relative w-screen min-h-screen overflow-hidden"
+      style={{ backgroundColor: "#0a0a0f" }}
+    >
+      {/* Background grid */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Gradient orbs */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,255,136,0.03) 0%, transparent 70%)", filter: "blur(60px)" }} />
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 70%)", filter: "blur(60px)" }} />
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-24 md:py-32">
+        {/* Header */}
+        <div className="mb-20">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="inline-block w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#00ff88" }} />
+            <ScatterText
+              text="featured_projects"
+              className="font-mono text-xs tracking-[0.3em] uppercase"
+              style={{ color: "#00ff88" }}
+              scatterRadius={35}
+              scatterForce={12}
+              accentColor="#00ff88"
+            />
+          </div>
+
+          <div className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight" style={{ color: "#ffffff" }}>
+            <ScatterText
+              text="My latest work"
+              as="h1"
+              scatterRadius={60}
+              scatterForce={25}
+              accentColor="#00ff88"
+            />
+          </div>
+
+          <div className="mt-6 text-base max-w-lg font-mono" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <ScatterText
+              text="// Production systems built from scratch — smart contracts, SDKs, and full-stack platforms."
+              as="p"
+              scatterRadius={40}
+              scatterForce={15}
+              accentColor="#00ff88"
+            />
+          </div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project, index) => (
+            <ScatterBox
+              key={project.title}
+              accentColor={project.accent}
+              particleDensity={5}
+              scatterRadius={70}
+              scatterForce={7}
+              className="rounded-2xl"
+            >
+              <ProjectCard project={project} index={index} />
+            </ScatterBox>
           ))}
         </div>
       </div>

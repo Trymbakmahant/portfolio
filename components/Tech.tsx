@@ -1,42 +1,30 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScatterBox from "./ScatterBox";
+import ScatterText from "./ScatterText";
 
-gsap.registerPlugin(ScrollTrigger);
-
-// --- Data for the Tech Stack Section ---
 const techList = [
-  // Core Languages
-  { name: "JavaScript", src: "/logos/javascript.svg" },
-  { name: "TypeScript", src: "/logos/typescript.svg" },
-  { name: "Python", src: "/logos/python.svg" },
-  { name: "Rust", src: "/logos/rust.svg" },
-  { name: "Golang", src: "/logos/golang.svg" },
-  { name: "C++", src: "/logos/c++.svg" },
-
-  // Frontend & Backend Frameworks
-  { name: "React", src: "/logos/react.svg" },
-  { name: "Next.js", src: "/logos/next.svg" },
-  { name: "Express.js", src: "/logos/express.svg" },
-  { name: "Linux", src: "/logos/linux.svg" },
-  { name: "Node.js", src: "/logos/nodejs.svg" },
-
-  // Blockchain & Web3
-  { name: "Ethereum", src: "/logos/etherum.svg" },
   { name: "Solana", src: "/logos/solana.svg" },
+  { name: "Rust", src: "/logos/rust.svg" },
+  { name: "Ethereum", src: "/logos/etherum.svg" },
   { name: "Web3.js", src: "/logos/web3js.svg" },
   { name: "Ethers.js", src: "/logos/etherjs.svg" },
-  { name: "Docker", src: "/logos/docker.svg" },
-
-  // Database & Cloud
+  { name: "TypeScript", src: "/logos/typescript.svg" },
+  { name: "JavaScript", src: "/logos/javascript.svg" },
+  { name: "Golang", src: "/logos/golang.svg" },
+  { name: "Python", src: "/logos/python.svg" },
+  { name: "Next.js", src: "/logos/next.svg" },
+  { name: "React", src: "/logos/react.svg" },
+  { name: "Node.js", src: "/logos/nodejs.svg" },
+  { name: "Express.js", src: "/logos/express.svg" },
   { name: "Postgres", src: "/logos/postgres.svg" },
-  { name: "Arduino", src: "/logos/arduino.svg" },
+  { name: "Docker", src: "/logos/docker.svg" },
+  { name: "Linux", src: "/logos/linux.svg" },
 ];
 
-// --- Tech Icon Component for Scrolling ---
 interface TechIconProps {
   name: string;
   src: string;
@@ -44,16 +32,20 @@ interface TechIconProps {
 
 const TechIcon = ({ name, src }: TechIconProps) => {
   return (
-    <div className="flex-shrink-0 flex flex-col items-center mx-4">
+    <div className="flex-shrink-0 flex flex-col items-center mx-5 group">
       <div
-        className="w-20 h-20 flex items-center justify-center p-3 
-                   rounded-2xl border backdrop-blur-sm
-                   transform transition-all duration-300 ease-out hover:scale-110"
+        className="w-20 h-20 flex items-center justify-center p-3 rounded-xl border transform transition-all duration-300 ease-out hover:scale-110 hover:-translate-y-1 relative overflow-hidden"
         style={{
-          borderColor: "rgba(123, 123, 123, 0.3)",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
-          boxShadow:
-            "0 8px 16px rgba(123, 123, 123, 0.1), 0 0 8px rgba(123, 123, 123, 0.05)",
+          borderColor: "rgba(255, 255, 255, 0.06)",
+          backgroundColor: "rgba(255, 255, 255, 0.02)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = "rgba(0, 255, 136, 0.3)";
+          e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 255, 136, 0.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.06)";
+          e.currentTarget.style.boxShadow = "none";
         }}
       >
         <Image
@@ -61,7 +53,8 @@ const TechIcon = ({ name, src }: TechIconProps) => {
           alt={`${name} icon`}
           width={40}
           height={40}
-          className="object-contain transition-all duration-300"
+          className="object-contain relative z-10"
+          style={{ filter: "brightness(0.9) contrast(1.1)" }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.onerror = null;
@@ -70,8 +63,8 @@ const TechIcon = ({ name, src }: TechIconProps) => {
         />
       </div>
       <span
-        className="text-xs font-medium mt-2 text-center whitespace-nowrap"
-        style={{ color: "#7B7B7B" }}
+        className="text-[11px] font-mono font-medium mt-2 text-center whitespace-nowrap transition-colors duration-300 group-hover:text-[#00ff88]"
+        style={{ color: "rgba(255, 255, 255, 0.4)" }}
       >
         {name}
       </span>
@@ -79,121 +72,152 @@ const TechIcon = ({ name, src }: TechIconProps) => {
   );
 };
 
-// --- Main Tech Stack Section Component ---
 export default function Tech() {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // Only keep the infinite scroll - lightweight gsap tween
   useEffect(() => {
-    if (headingRef.current && sectionRef.current) {
-      const words = headingRef.current.textContent?.split(" ") || [];
-      headingRef.current.innerHTML = words
-        .map((word) => `<span class="word">${word}</span>`)
-        .join(" ");
-
-      const wordElements = headingRef.current.querySelectorAll(".word");
-
-      gsap.set(wordElements, { y: 50, opacity: 0 });
-
-      gsap.to(wordElements, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-      });
-    }
-
-    // Infinite scroll animation
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const totalWidth = container.scrollWidth;
 
-      gsap.to(container, {
+      const tween = gsap.to(container, {
         x: -totalWidth / 2,
-        duration: 20,
+        duration: 25,
         ease: "none",
         repeat: -1,
       });
-    }
 
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+      return () => { tween.kill(); };
+    }
   }, []);
 
   return (
     <section
-      ref={sectionRef}
       id="tech-stack"
       className="relative w-screen flex flex-col items-center py-24 md:py-32 px-4 sm:px-6 overflow-hidden"
-      style={{ backgroundColor: "#F8F8F8", color: "#222222" }}
+      style={{ backgroundColor: "#0a0a0f" }}
     >
-      <div className="max-w-6xl w-full text-center relative z-10">
-        {/* Section Heading */}
-        <div className="mb-16">
-          <h3
-            className="font-bold uppercase tracking-widest text-sm mb-4"
-            style={{ color: "#7B7B7B" }}
+      {/* Background grid */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Gradient orb */}
+      <div
+        className="absolute top-0 left-1/3 w-[600px] h-[400px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(0,212,255,0.03) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-6xl w-full">
+        {/* Header - centered */}
+        <div className="text-center mb-16">
+          {/* Terminal-style label */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <span
+              className="inline-block w-2 h-2 rounded-full animate-glow-pulse"
+              style={{ backgroundColor: "#00d4ff" }}
+            />
+            <ScatterText
+              text="tech_stack"
+              className="font-mono text-xs tracking-[0.3em] uppercase"
+              style={{ color: "#00d4ff" }}
+              scatterRadius={35}
+              scatterForce={12}
+              accentColor="#00d4ff"
+            />
+          </div>
+
+          {/* Section Heading */}
+          <div
+            className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 flex justify-center"
+            style={{ color: "#ffffff" }}
           >
-            Technical Expertise
-          </h3>
-          <h2
-            ref={headingRef}
-            className="text-4xl md:text-5xl font-extrabold leading-tight"
-            style={{ color: "#222222" }}
+            <ScatterText
+              text="Tools of the trade"
+              as="h2"
+              scatterRadius={55}
+              scatterForce={22}
+              accentColor="#00d4ff"
+            />
+          </div>
+
+          <div
+            className="font-mono text-sm mx-auto mb-0 flex justify-center"
+            style={{ color: "rgba(255, 255, 255, 0.4)" }}
           >
-            Technologies I work with
-          </h2>
+            <ScatterText
+              text="// Battle-tested technologies powering production systems"
+              as="p"
+              scatterRadius={40}
+              scatterForce={15}
+              accentColor="#00d4ff"
+            />
+          </div>
         </div>
 
-        {/* Infinite Scrolling Tech Icons */}
-        <div className="relative overflow-hidden">
-          {/* Left fade gradient */}
-          <div
-            className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-            style={{
-              background: "linear-gradient(to right, #F8F8F8, transparent)",
-            }}
-          />
+        {/* Infinite Scrolling Tech Icons in ScatterBox */}
+        <ScatterBox accentColor="#00d4ff" particleDensity={5} scatterRadius={70} scatterForce={6} className="rounded-2xl p-6">
+          <div className="relative overflow-hidden">
+            {/* Left fade */}
+            <div
+              className="absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
+              style={{
+                background: "linear-gradient(to right, #0a0a0f, transparent)",
+              }}
+            />
 
-          {/* Right fade gradient */}
-          <div
-            className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-            style={{
-              background: "linear-gradient(to left, #F8F8F8, transparent)",
-            }}
-          />
+            {/* Right fade */}
+            <div
+              className="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
+              style={{
+                background: "linear-gradient(to left, #0a0a0f, transparent)",
+              }}
+            />
 
-          <div
-            ref={scrollContainerRef}
-            className="flex items-center"
-            style={{ width: "fit-content" }}
-          >
-            {/* First set of tech icons */}
-            {techList.map((tech) => (
-              <TechIcon
-                key={`first-${tech.name}`}
-                name={tech.name}
-                src={tech.src}
-              />
-            ))}
-            {/* Duplicate set for seamless loop */}
-            {techList.map((tech) => (
-              <TechIcon
-                key={`second-${tech.name}`}
-                name={tech.name}
-                src={tech.src}
-              />
-            ))}
+            <div
+              ref={scrollContainerRef}
+              className="flex items-center"
+              style={{ width: "fit-content" }}
+            >
+              {techList.map((tech) => (
+                <TechIcon key={`first-${tech.name}`} name={tech.name} src={tech.src} />
+              ))}
+              {techList.map((tech) => (
+                <TechIcon key={`second-${tech.name}`} name={tech.name} src={tech.src} />
+              ))}
+            </div>
           </div>
+        </ScatterBox>
+
+        {/* Category labels */}
+        <div className="mt-12 flex flex-wrap justify-center gap-4">
+          {[
+            { label: "Blockchain & Web3", color: "#00ff88" },
+            { label: "Languages", color: "#00d4ff" },
+            { label: "Frameworks", color: "#a855f7" },
+            { label: "Infrastructure", color: "#ff6b35" },
+          ].map((cat) => (
+            <span
+              key={cat.label}
+              className="font-mono text-[10px] tracking-wider px-3 py-1.5 rounded-full border"
+              style={{
+                color: cat.color,
+                borderColor: `${cat.color}33`,
+                backgroundColor: `${cat.color}08`,
+              }}
+            >
+              {cat.label}
+            </span>
+          ))}
         </div>
       </div>
     </section>

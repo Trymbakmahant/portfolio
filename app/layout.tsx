@@ -13,30 +13,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Trymbak Mahanat - Full Stack Developer & Web3 Builder",
+  title: "Trymbak Mahanat - Web3 & Full-Stack Engineer | Solana Developer",
   description:
-    "Portfolio of Trymbak Mahanat - Full stack developer specializing in web3, blockchain infrastructure, gaming, and enterprise solutions. Explore projects like Eclipse Domains, Solana Remix, Stackem, TurboWhack, and LeafSpark.",
+    "Portfolio of Trymbak Mahanat - Web3 & Full-Stack Engineer specializing in Solana, Anchor Protocol, Rust, and TypeScript. Builder of prediction markets, supply chain protocols, and enterprise solutions. ETHIndia 2024 Grand Prize Winner.",
   keywords: [
     "Trymbak Mahanat",
-    "Full Stack Developer",
     "Web3 Developer",
-    "Blockchain Developer",
     "Solana Developer",
-    "React Developer",
-    "Next.js Developer",
-    "TypeScript Developer",
+    "Anchor Protocol",
+    "Blockchain Developer",
+    "Smart Contract Developer",
+    "Full Stack Developer",
     "Rust Developer",
-    "Portfolio",
+    "TypeScript Developer",
+    "Prediction Markets",
+    "AI Oracles",
+    "Base Network",
+    "Solidity",
+    "Next.js Developer",
+    "React Developer",
+    "DeFi Developer",
+    "Supply Chain Blockchain",
+    "ETHIndia Winner",
+    "PnP Exchange",
     "Eclipse Domains",
-    "Solana Remix",
     "Stackem",
     "TurboWhack",
     "LeafSpark",
-    "Blockchain Infrastructure",
-    "DeFi Developer",
-    "Smart Contracts",
-    "Frontend Developer",
-    "Backend Developer",
+    "Modern Village Future",
   ],
   authors: [{ name: "Trymbak Mahanat" }],
   creator: "Trymbak Mahanat",
@@ -44,16 +48,16 @@ export const metadata: Metadata = {
   category: "Technology",
   classification: "Portfolio",
   referrer: "origin-when-cross-origin",
-  colorScheme: "light",
-  themeColor: "#ec4899",
+  colorScheme: "dark",
+  themeColor: "#00ff88",
   viewport: "width=device-width, initial-scale=1",
   alternates: {
     canonical: "https://trymbakmahanat.vercel.app",
   },
   openGraph: {
-    title: "Trymbak Mahanat - Full Stack Developer & Web3 Builder",
+    title: "Trymbak Mahanat - Web3 & Full-Stack Engineer | Solana Developer",
     description:
-      "Portfolio showcasing innovative projects spanning web3, infrastructure, gaming, and enterprise solutions.",
+      "Web3 engineer specializing in Solana, prediction markets, and enterprise blockchain solutions. 10+ production apps shipped. ETHIndia 2024 Grand Prize Winner.",
     url: "https://trymbakmahanat.vercel.app",
     siteName: "Trymbak Mahanat Portfolio",
     images: [
@@ -71,9 +75,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trymbak Mahanat - Full Stack Developer & Web3 Builder",
+    title: "Trymbak Mahanat - Web3 & Full-Stack Engineer | Solana Developer",
     description:
-      "Portfolio showcasing innovative projects spanning web3, infrastructure, gaming, and enterprise solutions.",
+      "Web3 engineer specializing in Solana, prediction markets, and enterprise blockchain solutions. 10+ production apps shipped.",
     images: ["/pfp.png"],
     creator: "@TrymbakMahant",
     site: "@TrymbakMahant",
@@ -95,7 +99,7 @@ export const metadata: Metadata = {
     google: "your-google-verification-code", // Add your Google Search Console verification code
   },
   other: {
-    "msapplication-TileColor": "#ec4899",
+    "msapplication-TileColor": "#0a0a0f",
     "msapplication-config": "/browserconfig.xml",
   },
 };
@@ -104,32 +108,38 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Trymbak Mahanat",
-  jobTitle: "Full Stack Developer & Web3 Builder",
+  jobTitle: "Web3 & Full-Stack Engineer",
   description:
-    "Full stack developer specializing in web3, blockchain infrastructure, gaming, and enterprise solutions",
+    "Web3 engineer specializing in Solana, Anchor Protocol, prediction markets, and enterprise blockchain solutions. ETHIndia 2024 Grand Prize Winner.",
   url: "https://trymbakmahanat.vercel.app",
   image: "https://trymbakmahanat.vercel.app/pfp.png",
   sameAs: [
-    "https://github.com/TrymbakMahant",
+    "https://github.com/Trymbakmahant",
     "https://www.linkedin.com/in/trymbak-mahant-2652701ba/",
     "https://x.com/TrymbakMahant",
   ],
   address: {
     "@type": "PostalAddress",
+    addressLocality: "Jashpur",
+    addressRegion: "Chhattisgarh",
     addressCountry: "IN",
-    addressRegion: "India",
   },
   knowsAbout: [
-    "Web3 Development",
-    "Blockchain Development",
-    "Full Stack Development",
+    "Solana Development",
+    "Anchor Protocol",
+    "Smart Contract Development",
+    "Prediction Markets",
+    "AI Oracles Integration",
     "TypeScript",
     "Rust",
+    "Solidity",
+    "Go",
     "React",
     "Next.js",
-    "Solana",
-    "Smart Contracts",
-    "DeFi",
+    "Node.js",
+    "PostgreSQL",
+    "Supply Chain Protocols",
+    "SDK Development",
   ],
   alumniOf: {
     "@type": "EducationalOrganization",
@@ -137,7 +147,7 @@ const structuredData = {
   },
   hasOccupation: {
     "@type": "Occupation",
-    name: "Full Stack Developer",
+    name: "Web3 & Full-Stack Engineer",
     occupationLocation: {
       "@type": "Country",
       name: "India",
@@ -159,7 +169,8 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} bg-white ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ backgroundColor: "#0a0a0f" }}
       >
         {children}
       </body>

@@ -230,7 +230,7 @@ export default function AsciiPortrait({
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="cursor-crosshair relative z-10"
+        className="cursor-crosshair relative z-10 max-w-full h-auto"
         style={{ backgroundColor: "transparent" }}
       />
 

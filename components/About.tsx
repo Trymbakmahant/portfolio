@@ -8,7 +8,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative flex flex-col items-center w-screen justify-center py-24 md:py-32 px-4 sm:px-6 overflow-hidden"
+      className="relative flex flex-col items-center w-full justify-center py-24 md:py-32 px-4 sm:px-6 overflow-hidden"
       style={{ backgroundColor: "#0a0a0f" }}
       aria-labelledby="about-heading"
     >

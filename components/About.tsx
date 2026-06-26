@@ -68,19 +68,7 @@ export default function About() {
             />
           </div>
 
-          <div
-            id="about-heading"
-            className="text-4xl md:text-5xl font-bold text-center md:text-left mb-8 leading-tight"
-            style={{ color: "#ffffff" }}
-          >
-            <ScatterText
-              text="I build decentralized, future-proof systems."
-              as="h2"
-              scatterRadius={50}
-              scatterForce={20}
-              accentColor="#00ff88"
-            />
-          </div>
+         
 
           <div
             className="text-base leading-relaxed mb-12 text-center md:text-left max-w-lg font-mono"
